@@ -19,13 +19,17 @@ ENV JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF-8 –Xms128m –Xmx1024m -XX:MaxPe
 ENV JAVA_OPTS="$JAVA_OPTS -Ddomibus.config.location=/opt/eev/domibus/conf/domibus"
 
 COPY ./artifacts/domibus-distribution-5.0-tomcat-full/domibus/ /opt/eev/domibus/
-# For Domibus Gateway 5.0 MySQL Connector version has to be >=8.0.23, most likly due to TimeZone handling changes
+# For Domibus Gateway 5.0 MySQL Connector version has to be >=8.0.23, most likely due to TimeZone handling changes
 COPY ./artifacts/mysql-connector-java-8.0.30.jar /opt/eev/domibus/lib/
 COPY ./artifacts/ojdbc8.jar /opt/eev/domibus/lib/
 # MariaDB is not officially supported in Domibus Gateway 5.0
 #ADD mariadb-connector-j.jar /opt/eev/domibus/lib/
 
-#COPY ./artifacts
+# Connector plugin
+#COPY ./artifacts/domibus-connector-plugin-4.4.x-GW5.0-test-SNAPSHOT.jar  /opt/eev/domibus/conf/plugins/lib/domibus-connector-plugin.jar
+#COPY ./artifacts/dc-plugin.properties /opt/eev/domibus/conf/plugins/config/dc-plugin.properties
+#COPY ./artifacts/activemq.xml /opt/eev/domibus/conf/internal/activemq.xml
+
 USER root
 WORKDIR /opt/eev/domibus
 RUN chmod u+x ./bin/*.sh
@@ -33,7 +37,4 @@ ENTRYPOINT [sh /opt/eev/domibus/bin/startup.sh]
 
 
 #TODO
-#modify activemq.xml
-#add connector plugin
-#check tmp or temp
 #run on user not root
